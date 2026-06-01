@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kollu Keerthana | Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Color Palette & Variables */
+        :root {
+            --bg-color: #050505;
+            --surface-color: rgba(26, 26, 26, 0.7);
+            --text-main: #ffffff;
+            --text-muted: #b3b3b3;
+            --accent-red: #2419ff; /* Deep Blue */
+            --accent-orange: #2bceff; /* Light Blue */
+            --gradient: linear-gradient(135deg, var(--accent-red), var(--accent-orange));
+            --glass-border: 1px solid rgba(0, 47, 255, 0.05);
+        }
+
+        /* Base Styles */
+        html { scroll-behavior: smooth; }
+        body { margin: 0; font-family: 'Poppins', sans-serif; background-color: var(--bg-color); color: var(--text-main); line-height: 1.7; overflow-x: hidden; position: relative; }
+        
+        /* Particle Sparkle Canvas */
+        #sparkle-container {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: -1;
+            overflow: hidden;
+        }
+        .sparkle {
+            position: absolute;
+            background: #fff;
+            border-radius: 50%;
+            box-shadow: 0 0 10px 2px var(--accent-orange);
+            opacity: 0;
+            animation: floatUp 4s linear forwards;
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(0) scale(0.5); opacity: 0; }
+            50% { opacity: 0.8; transform: translateY(-50px) scale(1.2); box-shadow: 0 0 15px 3px var(--accent-red); }
+            100% { transform: translateY(-150px) scale(0.5); opacity: 0; }
+        }
+
+        /* Scroll Fade-In Animation Classes */
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        a { color: var(--accent-orange); text-decoration: none; transition: all 0.3s ease; }
+        a:hover { color: var(--accent-red); text-shadow: 0 0 8px rgba(51, 126, 255, 0.5); }
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+
+        /* Glassmorphism */
+        .glass-card {
+            background: var(--surface-color);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: var(--glass-border);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        /* Hero Section */
+        header {
+            min-height: 100vh; display: flex; align-items: center;
+            background: radial-gradient(circle at 80% 20%, rgba(51, 119, 255, 0.15), transparent 40%),
+                        radial-gradient(circle at 20% 80%, rgba(43, 75, 255, 0.15), transparent 40%);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .hero-content { display: flex; align-items: center; justify-content: space-between; gap: 50px; width: 100%; animation: fadeIn 1.5s ease forwards; }
+        .hero-text { flex: 1; max-width: 600px; }
+        .hero-text h1 { font-size: 4rem; margin: 0; line-height: 1.1; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 700; }
+        .hero-text h2 { font-size: 1.8rem; color: var(--text-muted); font-weight: 300; margin: 15px 0 20px 0; }
+        .hero-text p { font-size: 1.1rem; color: var(--text-muted); margin-bottom: 30px; }
+        
+        /* Buttons */
+        .btn-group { display: flex; gap: 15px; flex-wrap: wrap; }
+        .cta-btn { display: inline-block; padding: 14px 35px; background: var(--gradient); color: #fff; font-weight: 600; border-radius: 30px; text-transform: uppercase; letter-spacing: 1.5px; box-shadow: 0 8px 20px rgba(51, 61, 255, 0.3); border: none; cursor: pointer; transition: all 0.3s ease; }
+        .cta-btn:hover { transform: scale(1.05); box-shadow: 0 10px 25px rgba(43, 209, 255, 0.4); color: #fff; }
+        
+        .cta-btn.secondary { background: transparent; border: 2px solid var(--accent-orange); color: var(--accent-orange); box-shadow: none; }
+        .cta-btn.secondary:hover { background: rgba(43, 223, 255, 0.1); border-color: var(--accent-red); color: var(--accent-red); }
+
+        /* Photo Area */
+        .hero-image-container { flex: 0 0 auto; position: relative; }
+        .photo-wrapper { width: 320px; height: 320px; border-radius: 50%; padding: 8px; background: var(--gradient); box-shadow: 0 0 40px rgba(51, 58, 255, 0.3); animation: float 6s ease-in-out infinite; }
+        .photo-inner { width: 100%; height: 100%; border-radius: 50%; background-color: #1a1a1a; overflow: hidden; display: flex; align-items: center; justify-content: center; border: 4px solid var(--bg-color); }
+        .photo-inner img { width: 100%; height: 100%; object-fit: cover; }
+        .photo-placeholder-text { color: var(--text-muted); text-align: center; font-size: 0.9rem; padding: 20px; }
+
+        section { padding: 100px 0; position: relative; z-index: 10; }
+        section h3 { font-size: 2.5rem; margin-top: 0; margin-bottom: 40px; position: relative; display: inline-block; }
+        section h3::after { content: ''; position: absolute; bottom: -10px; left: 0; width: 60%; height: 4px; background: var(--gradient); border-radius: 2px; }
+
+        .edu-card { border-left: 4px solid var(--accent-orange); margin-bottom: 40px; }
+        .cgpa-highlight { display: inline-block; margin-top: 15px; padding: 8px 16px; background: rgba(43, 255, 255, 0.1); border: 1px solid var(--accent-orange); border-radius: 8px; font-size: 1.1rem; font-weight: 600; color: var(--accent-orange); }
+
+        /* --- SIMPLIFIED SKILL MATRIX --- */
+        .skill-section-title { font-size: 1.4rem; color: var(--accent-orange); margin: 40px 0 20px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 10px; }
+        .skills-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+        
+        .skill-card { background: rgba(255, 255, 255, 0.02); border: var(--glass-border); border-radius: 12px; padding: 25px; transition: all 0.3s ease; position: relative; overflow: hidden; }
+        .skill-card::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--gradient); opacity: 0.5; transition: opacity 0.3s; }
+        .skill-card:hover { transform: translateY(-5px); background: rgba(255, 255, 255, 0.05); box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
+        .skill-card:hover::before { opacity: 1; }
+        
+        .skill-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .skill-title { font-weight: 600; font-size: 1.2rem; letter-spacing: 0.5px; }
+        .skill-tier { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; padding: 4px 10px; border-radius: 4px; border: 1px solid; }
+        
+        /* Mastery Dots */
+        .mastery-track { display: flex; gap: 6px; margin-top: 10px; }
+        .dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(255, 255, 255, 0.1); }
+        .dot.active { background: var(--gradient); box-shadow: 0 0 8px var(--accent-red); }
+
+        /* Projects Grid */
+        .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; }
+        .project-link-wrapper { display: block; }
+        .project-link-wrapper .glass-card { transition: all 0.4s ease; border: 1px solid rgba(255, 255, 255, 0.05); cursor: pointer; }
+        .project-link-wrapper:hover .glass-card { transform: translateY(-8px); border-color: var(--accent-orange); box-shadow: 0 15px 40px rgba(255, 146, 43, 0.2); }
+        .project-card h4 { color: #fff; margin-top: 0; font-size: 1.5rem; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+        .project-card h4 span.highlight { color: var(--accent-red); }
+        .visit-icon { font-size: 0.9rem; color: var(--text-muted); background: rgba(255,255,255,0.1); padding: 4px 10px; border-radius: 12px; transition: background 0.3s; }
+        .project-link-wrapper:hover .visit-icon { background: var(--gradient); color: #fff; }
+
+        /* Contact Section */
+        .contact-wrapper { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; }
+        .contact-form { display: flex; flex-direction: column; gap: 20px; }
+        .input-group { display: flex; flex-direction: column; gap: 8px; }
+        .input-group label { font-size: 0.9rem; color: var(--text-muted); }
+        .contact-input { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); color: #fff; padding: 15px; border-radius: 8px; font-family: inherit; font-size: 1rem; transition: border-color 0.3s; }
+        .contact-input:focus { outline: none; border-color: var(--accent-orange); background: rgba(255, 255, 255, 0.06); }
+        textarea.contact-input { resize: vertical; min-height: 120px; }
+
+        /* Footer */
+        footer { text-align: center; padding: 40px 0; border-top: 1px solid rgba(255, 255, 255, 0.05); background-color: rgba(0,0,0,0.8); position: relative; z-index: 10;}
+        .social-links { margin: 20px 0; }
+        .social-links a { margin: 0 15px; font-size: 1.1rem; font-weight: 600; }
+
+        @media (max-width: 900px) {
+            .hero-content { flex-direction: column-reverse; text-align: center; padding-top: 100px; }
+            .hero-text h1 { font-size: 3rem; }
+            .btn-group { justify-content: center; }
+            section h3::after { left: 20%; width: 60%; }
+            .contact-wrapper { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="sparkle-container"></div>
+
+    <header>
+        <div class="container hero-content">
+            <div class="hero-text">
+                <h1>Kollu Keerthana</h1>
+                <h2>AIML Student & Full-Stack Developer</h2>
+                <p>As an AIML student, I have developed a strong foundation for continuous learning. I am passionate about creating elegant code and aspire to build impactful technology.</p>
+                <div class="btn-group">
+                    <a href="#contact" class="cta-btn">Contact Me</a>
+                    <a href="keerthana-resume.pdf" target="_blank" class="cta-btn secondary">View Resume</a>
+                </div>
+            </div>
+            <div class="hero-image-container">
+                <div class="photo-wrapper">
+                    <div class="photo-inner">
+                        <img src="k.jpeg" alt="Kollu Keerthana" onerror="this.style.display='none'">
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <section id="education" class="reveal">
+            <h3>Education & Leadership</h3>
+            <div class="glass-card edu-card reveal">
+                <h4 style="margin: 0 0 5px 0; font-size: 1.4rem; color: #fff;">B.Tech in Artificial Intelligence & Machine Learning</h4>
+                <p style="margin: 0 0 15px 0; color: var(--accent-orange); font-weight: 600;">Malla Reddy University</p>
+                <p style="margin: 0;">Currently serving as the <strong>Class Representative</strong> (Gamma section). I coordinate study materials, share resources, and act as a bridge between students and faculty.</p>
+                <div class="cgpa-highlight">First Semester CGPA: 9.72</div>
+            </div>
+        </section>
+
+        <section id="skills" class="reveal">
+            <h3>Technical & Professional Skills</h3>
+            <p style="color: var(--text-muted); margin-bottom: 40px; font-size: 1.1rem;">A breakdown of my current proficiency in various technologies and skills.</p>
+
+            <h4 class="skill-section-title reveal">Programming & Development</h4>
+            <div class="skills-grid">
+                
+                <div class="skill-card reveal">
+                    <div class="skill-header">
+                        <span class="skill-title">HTML & CSS</span>
+                        <span class="skill-tier" style="color: var(--accent-orange); border-color: var(--accent-orange);">Advanced</span>
+                    </div>
+                    <div class="mastery-track">
+                        <div class="dot active"></div><div class="dot active"></div><div class="dot active"></div><div class="dot active"></div><div class="dot active"></div>
+                    </div>
+                </div>
+
+                <div class="skill-card reveal">
+                    <div class="skill-header">
+                        <span class="skill-title">Python Architecture</span>
+                        <span class="skill-tier" style="color: var(--accent-orange); border-color: var(--accent-orange);">Intermediate</span>
+                    </div>
+                    <div class="mastery-track">
+                        <div class="dot active"></div><div class="dot active"></div><div class="dot active"></div><div class="dot active"></div><div class="dot"></div>
+                    </div>
+                </div>
+
+                <div class="skill-card reveal">
+                    <div class="skill-header">
+                        <span class="skill-title">Database & Infrastructure</span>
+                        <span class="skill-tier" style="color: var(--accent-orange); border-color: var(--accent-orange);">Intermediate</span>
+                    </div>
+                    <p style="font-size: 0.8rem; color: var(--text-muted); margin: 0 0 10px 0;">MySQL, Vercel, MongoDB Atlas</p>
+                    <div class="mastery-track">
+                        <div class="dot active"></div><div class="dot active"></div><div class="dot active"></div><div class="dot active"></div><div class="dot"></div>
+                    </div>
+                </div>
+
+                <div class="skill-card reveal">
+                    <div class="skill-header">
+                        <span class="skill-title">React & Angular</span>
+                        <span class="skill-tier" style="color: var(--accent-red); border-color: var(--accent-red);">Familiar</span>
+                    </div>
+                    <div class="mastery-track">
+                        <div class="dot active"></div><div class="dot active"></div><div class="dot active"></div><div class="dot"></div><div class="dot"></div>
+                    </div>
+                </div>
+
+                <div class="skill-card reveal">
+                    <div class="skill-header">
+                        <span class="skill-title">C++</span>
+                        <span class="skill-tier" style="color: var(--accent-red); border-color: var(--accent-red);">Familiar</span>
+                    </div>
+                    <div class="mastery-track">
+                        <div class="dot active"></div><div class="dot active"></div><div class="dot active"></div><div class="dot"></div><div class="dot"></div>
+                    </div>
+                </div>
+
+                <div class="skill-card reveal">
+                    <div class="skill-header">
+                        <span class="skill-title">JavaScript</span>
+                        <span class="skill-tier" style="color: var(--accent-red); border-color: var(--accent-red);">Familiar</span>
+                    </div>
+                    <div class="mastery-track">
+                        <div class="dot active"></div><div class="dot active"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+                    </div>
+                </div>
+            </div>
+
+            <h4 class="skill-section-title reveal" style="margin-top: 60px;">Professional & Creative Dynamics</h4>
+            <div class="skills-grid">
+                
+                <div class="skill-card reveal">
+                    <div class="skill-header">
+                        <span class="skill-title">Team Coordination</span>
+                        <span class="skill-tier" style="color: var(--accent-orange); border-color: var(--accent-orange);">Advanced</span>
+                    </div>
+                    <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 10px;">Honed through my role as Class Representative and event collaboration.</p>
+                    <div class="mastery-track">
+                        <div class="dot active"></div><div class="dot active"></div><div class="dot active"></div><div class="dot active"></div><div class="dot active"></div>
+                    </div>
+                </div>
+
+                <div class="skill-card reveal">
+                    <div class="skill-header">
+                        <span class="skill-title">Communication</span>
+                        <span class="skill-tier" style="color: var(--accent-orange); border-color: var(--accent-orange);">Intermediate</span>
+                    </div>
+                    <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 10px;">Continuously refining professional English fluency and articulate expression.</p>
+                    <div class="mastery-track">
+                        <div class="dot active"></div><div class="dot active"></div><div class="dot active"></div><div class="dot active"></div><div class="dot"></div>
+                    </div>
+                </div>
+
+                <div class="skill-card reveal">
+                    <div class="skill-header">
+                        <span class="skill-title">Digital & AI Tooling</span>
+                        <span class="skill-tier" style="color: var(--accent-orange); border-color: var(--accent-orange);">Advanced</span>
+                    </div>
+                    <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 10px;">Proficient with Canva, AI prompt engineering, and Git/GitHub ecosystems.</p>
+                    <div class="mastery-track">
+                        <div class="dot active"></div><div class="dot active"></div><div class="dot active"></div><div class="dot active"></div><div class="dot"></div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="projects" class="reveal">
+            <h3>Featured Projects</h3>
+            <div class="projects-grid">
+                
+                <a href="https://agri-setu-pi.vercel.app/consumer_dashboard" target="_blank" class="project-link-wrapper reveal">
+                    <div class="glass-card project-card">
+                        <h4>Agri <span class="highlight">Setu</span> <span class="visit-icon">Visit Live ↗</span></h4>
+                        <p style="color: var(--text-muted); margin-bottom: 0;">A full-stack agricultural platform designed to help farmers by providing real-time climate updates and suitable crop predictions. Deployed live using Vercel and MySQL.</p>
+                    </div>
+                </a>
+
+                <div class="project-link-wrapper reveal">
+                    <div class="glass-card project-card">
+                        <h4>Bin<span class="highlight">Mate</span> <span class="visit-icon">Code ↗</span></h4>
+                        <p style="color: var(--text-muted); margin-bottom: 0;">A smart waste management application developed for a university hackathon, focusing on modern, code-driven environmental solutions.</p>
+                    </div>
+                </div>
+
+                <div class="project-link-wrapper reveal">
+                    <div class="glass-card project-card">
+                        <h4>Dev <span class="highlight">Connect</span> <span class="visit-icon">Code ↗</span></h4>
+                        <p style="color: var(--text-muted); margin-bottom: 0;">A platform focused on bringing developers together. Designed to facilitate collaboration, networking, and sharing of code resources among peers.</p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="contact" class="reveal">
+            <h3>Get In Touch</h3>
+            <div class="glass-card contact-wrapper reveal">
+                <div>
+                    <h4 style="font-size: 1.8rem; margin-top: 0;">Let's Build Something Together</h4>
+                    <p style="color: var(--text-muted);">Whether you have a question, a project idea, or just want to say hi, feel free to drop a message. I'm currently looking for new opportunities and collaborations.</p>
+                    <div style="margin-top: 30px;">
+                        <p>📍 Hyderabad, India</p>
+                        <p>🎓 Malla Reddy University</p>
+                    </div>
+                </div>
+                
+                <form class="contact-form" onsubmit="event.preventDefault(); alert('Form logic can be added later!');">
+                    <div class="input-group">
+                        <label for="name">Your Name</label>
+                        <input type="text" id="name" class="contact-input" placeholder="Enter Your Name" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="email">Your Email</label>
+                        <input type="email" id="email" class="contact-input" placeholder="enter_your_email@example.com" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="message">Your Message</label>
+                        <textarea id="message" class="contact-input" placeholder="How can we work together?" required></textarea>
+                    </div>
+                    <button type="submit" class="cta-btn" style="width: 100%; border-radius: 8px;">Send Message</button>
+                </form>
+            </div>
+        </section>
+
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="social-links">
+                <a href="https://www.linkedin.com/in/keerthana-kollu-521686380/" target="_blank">LinkedIn</a>
+                <a href="https://github.com/keerthanakollu" target="_blank">GitHub</a>
+            </div>
+            <p style="margin-top: 20px; font-size: 0.8rem; opacity: 0.4;">© 2026 Kollu Keerthana. Built with code and creativity.</p>
+        </div>
+    </footer>
+
+    <script>
+        // --- 1. Fade-In on Scroll Logic ---
+        function revealElements() {
+            var reveals = document.querySelectorAll(".reveal");
+            for (var i = 0; i < reveals.length; i++) {
+                var windowHeight = window.innerHeight;
+                var elementTop = reveals[i].getBoundingClientRect().top;
+                var elementVisible = 50; 
+
+                if (elementTop < windowHeight - elementVisible) {
+                    reveals[i].classList.add("active");
+                }
+            }
+        }
+        window.addEventListener("scroll", revealElements);
+        revealElements(); 
+
+        // --- 2. Background Sparkle Logic ---
+        function createSparkle() {
+            const container = document.getElementById('sparkle-container');
+            const sparkle = document.createElement('div');
+            sparkle.classList.add('sparkle');
+            
+            const size = Math.random() * 4 + 2; 
+            const startX = Math.random() * window.innerWidth;
+            const startY = Math.random() * window.innerHeight + 100; 
+            
+            sparkle.style.width = `${size}px`;
+            sparkle.style.height = `${size}px`;
+            sparkle.style.left = `${startX}px`;
+            sparkle.style.top = `${startY}px`;
+            
+            container.appendChild(sparkle);
+            
+            setTimeout(() => {
+                sparkle.remove();
+            }, 4000);
+        }
+
+        setInterval(createSparkle, 300);
+    </script>
+</body>
+</html>
